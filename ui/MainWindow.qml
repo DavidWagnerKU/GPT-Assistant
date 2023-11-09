@@ -32,6 +32,7 @@ ApplicationWindow {
 
             // Main text area
             TextArea {
+                id: chatArea
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 readOnly: true
@@ -46,17 +47,21 @@ ApplicationWindow {
                     id: messageInput
                     Layout.fillWidth: true
                     placeholderText: "Type your message here..."
+                    onAccepted: chatClient.sendMessage(text)
                 }
 
                 Button {
                     text: "Send"
-                    onClicked: {
-                        // Add logic to handle sending message
-                        console.log("Send button clicked with message:", messageInput.text)
-                        messageInput.text = "" // Clear the input field
-                    }
+                    onClicked: chatClient.sendMessage(messageInput.text)
                 }
             }
+        }
+    }
+    Connections {
+        target: chatClient
+
+        function onMessageReceived(message) {
+            chatArea.append(message)
         }
     }
 }
