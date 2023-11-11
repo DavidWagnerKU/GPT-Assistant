@@ -1,4 +1,3 @@
-import os
 from openai import OpenAI
 from PySide6.QtCore import QObject, Slot, Signal
 
@@ -22,5 +21,4 @@ class GPTClient(QObject):
 			],
 			model = self.modelName
 		)
-		self.messageReceived.emit(message)
 		self.messageReceived.emit(response.choices[0].message.content)

@@ -29,7 +29,7 @@ engine.load("ui\\MainWindow.qml")
 
 # Check if the engine loaded the QML file successfully
 if not engine.rootObjects():
-	sys.exit(-1)
+	raise Exception("Unable to load main window")
 
 
 sys.exit(app.exec())
