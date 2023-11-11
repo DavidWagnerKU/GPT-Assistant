@@ -8,11 +8,8 @@ class GPTClient(QObject):
 
 	def __init__(self, model):
 		super().__init__()
-		key = os.getenv("OPENAI_API_KEY")
-		if not key:
-			raise ValueError("The OPENAI_API_KEY environment variable is not set.")
 		self.modelName = model
-		self.client = OpenAI(api_key = key)
+		self.client = OpenAI()
 
 	@Slot(str)
 	def sendMessage(self, message):
