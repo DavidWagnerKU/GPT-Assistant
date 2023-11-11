@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 ApplicationWindow {
 	visible: true
@@ -21,16 +21,22 @@ ApplicationWindow {
 		anchors.fill: parent
 
 		// Sidebar
-		ListView {
-			Layout.preferredWidth: 200
-			model: ListModel {
-				ListElement { title: "Home" }
-				ListElement { title: "Settings" }
-				ListElement { title: "About" }
+		ColumnLayout {
+			width: 200
+
+			Button {
+				text: "New Chat"
+				Layout.fillWidth: true
+				onClicked: chatClient.createNewChat("New Chat")
 			}
-			delegate: ItemDelegate {
-				text: title
-				width: parent.width
+
+			ListView {
+				Layout.fillWidth: true
+				Layout.fillHeight: true
+				model: chatClient.threadList
+				delegate: Item {
+					Text { text: modelData.title }
+				}
 			}
 		}
 
