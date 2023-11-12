@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
 		self.ui.setupUi(self)
 
 		self.chatClient.threadAdded.connect(self.addThreadToList)
+		self.chatClient.messageReceived.connect(self.appendMessage)
 
 		self.loadThreadList()
 
@@ -38,4 +39,17 @@ class MainWindow(QMainWindow):
 
 	@Slot()
 	def sendMessage(self):
-		self.chatClient.sendMessage(self.ui.messageTextBox.text())
+		trimmedMessage = self.ui.messageTextBox.text()
+		if trimmedMessage != '':
+			self.appendMessage('You: ' + trimmedMessage)
+			self.chatClient.sendMessage(trimmedMessage)
+			self.ui.messageTextBox.clear()
+
+
+	@Slot(str)
+	def appendMessage(self, messageText):
+		"""
+		Appends the given message text to the chat window
+		"""
+		#TODO: Accept object/dict that contains role ('user', 'AI')
+		self.ui.chatArea.append('\n\n' + messageText)
