@@ -1,0 +1,3 @@
+
+* Create "Thread namer" assistant that operates in the background to update the name of a thread.
+  Will run after first AI response then again after 10 responses and again after 100 (or something like that).
