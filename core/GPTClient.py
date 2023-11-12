@@ -33,7 +33,7 @@ class GPTClient(QObject):
 					thread = self.client.beta.threads.retrieve(filePath.stem)
 					self.threadList.append(thread)
 				except Exception as e:
-					print(f"Error retrieving thread {filePath.stem}: {str(e)}")
+					print(f'Error retrieving thread {filePath.stem}: {str(e)}')
 
 
 	def createNewChat(self, title):
@@ -44,8 +44,8 @@ class GPTClient(QObject):
 		"""
 		thread = self.client.beta.threads.create(metadata = {'title': title})
 		self.threadList.append(thread)
-		with open(self.chatsDirectory / f"{thread.id}.txt", 'w') as file:
-			file.write("")
+		with open(self.chatsDirectory / f'{thread.id}.txt', 'w') as file:
+			file.write('')
 		self.threadAdded.emit(thread)
 
 
@@ -53,8 +53,8 @@ class GPTClient(QObject):
 		response = self.client.chat.completions.create(
 			messages = [
 				{
-					"role": "user",
-					"content": message,
+					'role': 'user',
+					'content': message,
 				}
 			],
 			model = self.modelName

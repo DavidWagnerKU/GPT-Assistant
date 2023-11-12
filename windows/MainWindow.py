@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
 
 
 	def addThreadToList(self, thread):
-		item = QListWidgetItem(thread.metadata.get("title", "Untitled"))
+		item = QListWidgetItem(thread.metadata.get('title', 'Untitled'))
 		item.setData(Qt.UserRole, thread.id)
 		self.ui.sidebar.addItem(item)
 
@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
 
 	@Slot()
 	def createNewChat(self):
-		self.chatClient.createNewChat("New Chat")
+		self.chatClient.createNewChat('New Chat')
 
 
 	@Slot()
