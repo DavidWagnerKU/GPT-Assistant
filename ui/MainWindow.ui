@@ -103,8 +103,41 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>sendButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sendMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>949</x>
+     <y>958</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>774</x>
+     <y>-19</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>messageTextBox</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sendMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>591</x>
+     <y>956</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>499</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>createNewChat()</slot>
+  <slot>sendMessage()</slot>
  </slots>
 </ui>

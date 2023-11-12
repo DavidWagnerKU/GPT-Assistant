@@ -1,6 +1,4 @@
-from pathlib import Path
-
-from PySide6.QtCore import QObject, Slot, Signal, Property
+from PySide6.QtCore import QObject, Signal
 from openai import OpenAI
 
 

@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, Slot, Signal
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QMainWindow, QListWidgetItem
 
 from core.GPTClient import GPTClient
@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
 
 
 	def addThreadToList(self, thread):
-		item = QListWidgetItem(thread.metadata.get('title', 'Untitled'))
+		item = QListWidgetItem(thread.metadata.get("title", "Untitled"))
 		item.setData(Qt.UserRole, thread.id)
 		self.ui.sidebar.addItem(item)
 
@@ -34,3 +34,8 @@ class MainWindow(QMainWindow):
 	@Slot()
 	def createNewChat(self):
 		self.chatClient.createNewChat("New Chat")
+
+
+	@Slot()
+	def sendMessage(self):
+		self.chatClient.sendMessage(self.ui.messageTextBox.text())
