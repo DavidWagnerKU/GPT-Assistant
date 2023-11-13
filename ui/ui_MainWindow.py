@@ -84,6 +84,7 @@ class Ui_MainWindow(object):
         self.newChatButton.clicked.connect(MainWindow.createNewChat)
         self.sendButton.clicked.connect(MainWindow.sendMessage)
         self.messageTextBox.returnPressed.connect(MainWindow.sendMessage)
+        self.sidebar.currentItemChanged.connect(MainWindow.chatThreadChanged)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi

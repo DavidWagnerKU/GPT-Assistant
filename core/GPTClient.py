@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 from PySide6.QtCore import QObject, Signal
@@ -6,7 +7,7 @@ from openai import OpenAI
 
 class GPTClient(QObject):
 	messageReceived = Signal(str)
-	threadAdded = Signal(object)
+	chatThreadAdded = Signal(object)
 
 
 	def __init__(self, model, chatsDirectory: Path, systemDirectory: Path):
@@ -17,12 +18,12 @@ class GPTClient(QObject):
 		self.systemDirectory.mkdir(exist_ok=True)
 
 		self.modelName = model
-		self.threadList = []
+		self.chatThreadList = []
 		self.mainAssistant = None
 
 		self.client = OpenAI()
 		self.getAssistants()
-		self.loadThreadList()
+		self.loadChatThreadList()
 
 
 	def getAssistants(self):
@@ -38,42 +39,52 @@ class GPTClient(QObject):
 					print(f'Error retrieving assistant {filePath.stem}: {str(e)}')
 
 
-	def loadThreadList(self):
+	def loadChatThreadList(self):
 		"""
-		Gets the list of threads stored in the local data directory,
+		Gets the list of chat threads stored in the local data directory,
 		retrieving information from the API if necessary.
 		"""
-		self.threadList.clear()
+		self.chatThreadList.clear()
 		for filePath in self.chatsDirectory.iterdir():
 			if filePath.is_file() and filePath.suffix == '.txt':
 				try:
 					thread = self.client.beta.threads.retrieve(filePath.stem)
-					self.threadList.append(thread)
+					self.chatThreadList.append(thread)
 				except Exception as e:
-					print(f'Error retrieving thread {filePath.stem}: {str(e)}')
+					print(f'Error retrieving chat thread {filePath.stem}: {str(e)}')
+		# TODO: Sort by date, first is most recent
 
 
 	def createNewChat(self, title):
 		"""
 		Starts a new chat thread with the given title.
-		:emits: threadAdded
+		:emits: chatThreadAdded
 		"""
 		thread = self.client.beta.threads.create(metadata = {'title': title})
-		self.threadList.append(thread)
+		self.chatThreadList.append(thread)
 		with open(self.chatsDirectory / f'{thread.id}.txt', 'w') as file:
 			file.write('')
-		self.threadAdded.emit(thread)
+		self.chatThreadAdded.emit(thread)
 
 
-	def sendMessage(self, threadId, message):
+	def sendMessage(self, chatThreadId, messageText):
 		"""
 		Sends the given user message.
-		:param threadId: ID of the chat thread with which this message is associated.
-		:param message: Message text to send
+		:param chatThreadId: ID of the chat thread with which this message is associated.
+		:param messageText: Message text to send
 		:emits: messageReceived
 		"""
+		message = self.client.beta.threads.messages.create(chatThreadId, role = 'user', content = messageText)
+		# TODO: Log message
 		run = self.client.beta.threads.runs.create(
-			thread_id = threadId,
+			thread_id = chatThreadId,
 			assistant_id = self.mainAssistant.id
 		)
-		#self.messageReceived.emit(response.choices[0].message.content)
+		while run.status != 'completed':
+			time.sleep(1)
+			run = self.client.beta.threads.runs.retrieve(
+				thread_id = chatThreadId,
+				run_id = run.id
+			)
+		messages = self.client.beta.threads.messages.list(chatThreadId)
+		self.messageReceived.emit(messages.data[0].content[0].text.value)

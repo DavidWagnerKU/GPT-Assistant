@@ -135,9 +135,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>sidebar</sender>
+   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>chatThreadChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>183</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>404</x>
+     <y>-20</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>createNewChat()</slot>
   <slot>sendMessage()</slot>
+  <slot>chatThreadChanged()</slot>
  </slots>
 </ui>

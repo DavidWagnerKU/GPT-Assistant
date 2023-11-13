@@ -1,7 +1,8 @@
 
-* Write messages to file. Include a number of fields including date/time, role (user/AI) and message.
-  Separate each message with Record Separator character (0x1E) and each field with Unit Separator (0x1F).
+* Write messages to file. Include a number of fields including date/time, id, role (user/AI) and message.
+  Separate each message with newline then Record Separator character (0x1E) and each field with Unit Separator (0x1F).
 
 * Create "Thread namer" assistant that operates in the background to update the name of a thread.
   Will run after first AI response then again after 10 responses and again after 100 (or something like that).
   It can probably be ran with the same thread ids that the main assistant uses, but only while main assistant is not running.
+  If user renames it, use metadata to flag it so it won't be renamed. If user clears name then update it again.

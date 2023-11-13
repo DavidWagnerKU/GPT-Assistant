@@ -11,25 +11,33 @@ class MainWindow(QMainWindow):
 	def __init__(self, chatClient: GPTClient):
 		super(MainWindow, self).__init__()
 		self.chatClient = chatClient
+		self.currentChatThreadId = None
+
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
 
-		self.chatClient.threadAdded.connect(self.addThreadToList)
+		self.chatClient.chatThreadAdded.connect(self.addChatThreadToList)
 		self.chatClient.messageReceived.connect(self.appendMessage)
 
-		self.loadThreadList()
+		self.loadChatThreadList()
 
 
-	def addThreadToList(self, thread):
-		item = QListWidgetItem(thread.metadata.get('title', 'Untitled'))
-		item.setData(Qt.UserRole, thread.id)
+	def addChatThreadToList(self, chatThread):
+		item = QListWidgetItem(chatThread.metadata.get('title', 'Untitled'))
+		item.setData(Qt.UserRole, chatThread.id)
 		self.ui.sidebar.addItem(item)
 
 
-	def loadThreadList(self):
+	def loadChatThreadList(self):
 		""" Load chat threads and populate the sidebar """
-		for thread in self.chatClient.threadList:
-			self.addThreadToList(thread)
+		for chatThread in self.chatClient.chatThreadList:
+			self.addChatThreadToList(chatThread)
+		self.currentChatThreadId = self.chatClient.chatThreadList[0].id
+
+
+	@Slot()
+	def chatThreadChanged(self, current: QListWidgetItem, previous: QListWidgetItem):
+		self.currentChatThreadId = current.data(Qt.UserRole)
 
 
 	@Slot()
@@ -42,7 +50,7 @@ class MainWindow(QMainWindow):
 		trimmedMessage = self.ui.messageTextBox.text()
 		if trimmedMessage != '':
 			self.appendMessage('You: ' + trimmedMessage)
-			self.chatClient.sendMessage(trimmedMessage)
+			self.chatClient.sendMessage(self.currentChatThreadId, trimmedMessage)
 			self.ui.messageTextBox.clear()
 
 
@@ -52,4 +60,4 @@ class MainWindow(QMainWindow):
 		Appends the given message text to the chat window
 		"""
 		#TODO: Accept object/dict that contains role ('user', 'AI')
-		self.ui.chatArea.append('\n\n' + messageText)
+		self.ui.chatArea.append('\n' + messageText)
