@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtWidgets import QMainWindow, QListWidgetItem
+from PySide6.QtWidgets import QMainWindow, QListWidgetItem, QPushButton, QWidget, QHBoxLayout, QLabel, QSizePolicy
 
 from core.GPTClient import GPTClient
 from ui.ui_MainWindow import Ui_MainWindow
@@ -26,9 +26,28 @@ class MainWindow(QMainWindow):
 
 
 	def addChatThreadToList(self, chatThread):
-		item = QListWidgetItem(chatThread.metadata.get('title', 'Untitled'))
+		item = QListWidgetItem()
 		item.setData(Qt.UserRole, chatThread.id)
+
+		label = QLabel(chatThread.metadata.get('title', 'Untitled'))
+		label.setObjectName('title')
+		label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+		label.setMinimumWidth(100)
+
+		deleteButton = QPushButton('X')
+		deleteButton.setObjectName('deleteButton')
+		deleteButton.setFixedSize(16, 16)
+		deleteButton.clicked.connect(lambda: self.deleteChatThread(item))
+
+		itemWidget = QWidget()
+		itemLayout = QHBoxLayout(itemWidget)
+		itemLayout.setContentsMargins(0, 0, 0, 0)
+		itemLayout.addWidget(label, stretch = 1, alignment = Qt.AlignLeft | Qt.AlignVCenter)
+		itemLayout.addWidget(deleteButton, stretch = 0, alignment = Qt.AlignRight | Qt.AlignVCenter)
+
 		self.ui.chatThreadsList.addItem(item)
+		self.ui.chatThreadsList.setItemWidget(item, itemWidget)
+
 
 
 	def loadChatThreadList(self):
@@ -39,13 +58,26 @@ class MainWindow(QMainWindow):
 
 
 	@Slot()
-	def chatThreadChanged(self, current: QListWidgetItem, previous: QListWidgetItem):
-		self.currentChatThreadId = current.data(Qt.UserRole)
+	def createNewChat(self):
+		self.chatClient.createNewChat('New Chat')
 
 
 	@Slot()
-	def createNewChat(self):
-		self.chatClient.createNewChat('New Chat')
+	def chatThreadChanged(self, current: QListWidgetItem, previous: QListWidgetItem):
+		self.selectChatThread(current.data(Qt.UserRole))
+
+
+	def selectChatThread(self, chatThreadId):
+		self.currentChatThreadId = chatThreadId
+		self.ui.chatArea.clear()
+		messages = self.chatClient.retrieveMessages(self.currentChatThreadId, 10)
+		for message in messages:
+			self.appendMessage(message.content[0].text.value)
+
+
+	@Slot()
+	def deleteChatThread(self, item: QListWidgetItem):
+		self.chatClient.deleteChatThread(item.data(Qt.UserRole))
 
 
 	@Slot()

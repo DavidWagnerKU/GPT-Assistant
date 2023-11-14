@@ -22,11 +22,11 @@ class GPTClient(QObject):
 		self.mainAssistant = None
 
 		self.client = OpenAI()
-		self.getAssistants()
+		self.retrieveAssistants()
 		self.loadChatThreadList()
 
 
-	def getAssistants(self):
+	def retrieveAssistants(self):
 		"""
 		Retrieve the assistants
 		"""
@@ -67,10 +67,18 @@ class GPTClient(QObject):
 		self.chatThreadAdded.emit(thread)
 
 
+	def deleteChatThread(self, chatThreadId):
+		"""
+		Deletes a chat thread and all it's messages from the server and from disk
+		:param chatThreadId: The ID of the chat thread
+		"""
+		self.client.beta.threads.delete(chatThreadId)
+
+
 	def sendMessage(self, chatThreadId, messageText):
 		"""
-		Sends the given user message.
-		:param chatThreadId: ID of the chat thread with which this message is associated.
+		Sends a user message to the server.
+		:param chatThreadId: The ID of the chat thread with which this message is associated.
 		:param messageText: Message text to send
 		:emits: messageReceived
 		"""
@@ -88,3 +96,14 @@ class GPTClient(QObject):
 			)
 		messages = self.client.beta.threads.messages.list(chatThreadId)
 		self.messageReceived.emit(messages.data[0].content[0].text.value)
+
+
+	def retrieveMessages(self, chatThreadId, numLimit):
+		"""
+		Retrieves a number of messages from the server in descending order of creation time.
+		:param chatThreadId: The ID of the chat thread the messages belong to.
+		:param numLimit: A limit on the number of objects to be returned. Limit can range between 1 and 100
+		:return: list of message objects
+		"""
+		result = self.client.beta.threads.messages.list(chatThreadId, limit = numLimit, order = 'desc')
+		return reversed(result.data)
