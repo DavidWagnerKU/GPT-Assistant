@@ -16,6 +16,9 @@ class MainWindow(QMainWindow):
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
 
+		with open('ui\\MainWindow.css', 'r', encoding='utf-8') as file:
+			self.setStyleSheet(file.read())
+
 		self.chatClient.chatThreadAdded.connect(self.addChatThreadToList)
 		self.chatClient.messageReceived.connect(self.appendMessage)
 
@@ -25,7 +28,7 @@ class MainWindow(QMainWindow):
 	def addChatThreadToList(self, chatThread):
 		item = QListWidgetItem(chatThread.metadata.get('title', 'Untitled'))
 		item.setData(Qt.UserRole, chatThread.id)
-		self.ui.sidebar.addItem(item)
+		self.ui.chatThreadsList.addItem(item)
 
 
 	def loadChatThreadList(self):
