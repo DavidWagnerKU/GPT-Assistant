@@ -1,1 +1,1 @@
-python main.py --config=configs.yaml
+python main.py --config=config.yaml
