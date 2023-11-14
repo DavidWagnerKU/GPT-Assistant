@@ -6,3 +6,13 @@
   Will run after first AI response then again after 10 responses and again after 100 (or something like that).
   It can probably be ran with the same thread ids that the main assistant uses, but only while main assistant is not running.
   If user renames it, use metadata to flag it so it won't be renamed. If user clears name then update it again.
+
+* Some possible functions:
+   - readFile
+   - writeFile
+   - updateFile   # For a file that is given to the AI for use with the retrieval tool. Updating would write back to the API.
+
+* Show date/time on the left side of each message.
+
+* Have a collapsable panel to the right that shows all files uploaded. Can add by dropping files. Can remove and update existing
+  files. Maybe also watch for file change and automatically upload.
