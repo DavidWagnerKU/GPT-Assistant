@@ -73,6 +73,8 @@ class GPTClient(QObject):
 		:param chatThreadId: The ID of the chat thread
 		"""
 		self.client.beta.threads.delete(chatThreadId)
+		file = self.chatsDirectory / f'{chatThreadId}.txt'
+		file.unlink(missing_ok = True)
 
 
 	def sendMessage(self, chatThreadId, messageText):
