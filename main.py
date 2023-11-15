@@ -1,5 +1,4 @@
 import sys
-import argparse
 from pathlib import Path
 
 from omegaconf import OmegaConf
@@ -10,11 +9,7 @@ from windows.MainWindow import MainWindow
 
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--config', type=str, default='config.yaml')
-
-cliArgs = parser.parse_args()
-config = OmegaConf.load(cliArgs.config)
+config = OmegaConf.load('config.yaml')
 
 app = QApplication(sys.argv)
 
