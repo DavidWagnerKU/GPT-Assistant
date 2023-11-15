@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
 
-		with open('ui\\MainWindow.css', 'r', encoding='utf-8') as file:
+		with open('src\\ui\\MainWindow.css', 'r', encoding='utf-8') as file:
 			self.setStyleSheet(file.read())
 
 		self.chatThreadListModel = ChatThreadListModel(self.chatClient.chatThreadList)

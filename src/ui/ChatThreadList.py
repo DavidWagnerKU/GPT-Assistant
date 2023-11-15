@@ -1,6 +1,7 @@
 from PySide6.QtCore import Qt, QAbstractListModel, QModelIndex, QEvent, QSize, QRect
 from PySide6.QtWidgets import QStyledItemDelegate, QLineEdit, QStyleOptionButton, QStyle, QApplication
 
+
 """
 Implements a custom widget for items in the chat thread list.
 It shows an edit and delete button when hovered over, and the title can be edited.
