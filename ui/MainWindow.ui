@@ -71,7 +71,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="chatThreadsList"/>
+        <widget class="QListView" name="chatThreadsList"/>
        </item>
       </layout>
      </widget>
@@ -87,6 +87,12 @@
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0" colspan="2">
         <widget class="QTextEdit" name="chatArea">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -95,11 +101,7 @@
        <item row="1" column="0" colspan="2">
         <layout class="QHBoxLayout" name="messageLayout">
          <item>
-          <widget class="QLineEdit" name="messageTextBox">
-           <property name="placeholderText">
-            <string>Type your message here...</string>
-           </property>
-          </widget>
+          <widget class="QPlainTextEdit" name="messageTextBox"/>
          </item>
          <item>
           <widget class="QPushButton" name="sendButton">
@@ -141,8 +143,8 @@
    <slot>sendMessage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>949</x>
-     <y>958</y>
+     <x>988</x>
+     <y>988</y>
     </hint>
     <hint type="destinationlabel">
      <x>774</x>
@@ -151,34 +153,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>messageTextBox</sender>
-   <signal>returnPressed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>sendMessage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>591</x>
-     <y>956</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>499</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>chatThreadsList</sender>
-   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <signal>clicked(QModelIndex)</signal>
    <receiver>MainWindow</receiver>
    <slot>chatThreadChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>183</x>
-     <y>263</y>
+     <x>149</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
-     <x>404</x>
-     <y>-20</y>
+     <x>378</x>
+     <y>-16</y>
     </hint>
    </hints>
   </connection>

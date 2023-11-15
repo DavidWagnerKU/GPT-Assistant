@@ -36,29 +36,20 @@
 
 #chatThreadsList::item {
 	height: 26px;
-	margin: 4px;
+	margin: 4px 2px;
 	padding: 6px;
 	border-radius: 4px;
+	color: hsl(0, 0%, 80%);
 }
 
 #chatThreadsList::item:hover {
+	color: hsl(0, 0%, 90%);
 	background-color: hsl(0, 0%, 30%);
 }
 
 #chatThreadsList::item:selected {
-	background-color: hsl(0, 0%, 40%);
-}
-
-#chatThreadsList::item QWidget#title {
-	color: hsl(0, 0%, 80%);
-}
-
-#chatThreadsList::item:hover QWidget#title {
-	color: hsl(0, 0%, 90%);
-}
-
-#chatThreadsList::item:selected QWidget#title {
 	color: white;
+	background-color: hsl(0, 0%, 40%);
 }
 
 #chatThreadsList::item QWidget#deleteButton {

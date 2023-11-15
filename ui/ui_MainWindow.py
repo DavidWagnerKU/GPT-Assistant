@@ -16,9 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLineEdit, QListWidget, QListWidgetItem, QMainWindow,
-    QPushButton, QSizePolicy, QTextEdit, QVBoxLayout,
-    QWidget)
+    QListView, QMainWindow, QPlainTextEdit, QPushButton,
+    QSizePolicy, QTextEdit, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -49,7 +48,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.newChatButton)
 
-        self.chatThreadsList = QListWidget(self.sidebar)
+        self.chatThreadsList = QListView(self.sidebar)
         self.chatThreadsList.setObjectName(u"chatThreadsList")
 
         self.verticalLayout_3.addWidget(self.chatThreadsList)
@@ -65,13 +64,18 @@ class Ui_MainWindow(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.chatArea = QTextEdit(self.mainFrame)
         self.chatArea.setObjectName(u"chatArea")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(1)
+        sizePolicy1.setHeightForWidth(self.chatArea.sizePolicy().hasHeightForWidth())
+        self.chatArea.setSizePolicy(sizePolicy1)
         self.chatArea.setReadOnly(True)
 
         self.gridLayout_2.addWidget(self.chatArea, 0, 0, 1, 2)
 
         self.messageLayout = QHBoxLayout()
         self.messageLayout.setObjectName(u"messageLayout")
-        self.messageTextBox = QLineEdit(self.mainFrame)
+        self.messageTextBox = QPlainTextEdit(self.mainFrame)
         self.messageTextBox.setObjectName(u"messageTextBox")
 
         self.messageLayout.addWidget(self.messageTextBox)
@@ -92,8 +96,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.newChatButton.clicked.connect(MainWindow.createNewChat)
         self.sendButton.clicked.connect(MainWindow.sendMessage)
-        self.messageTextBox.returnPressed.connect(MainWindow.sendMessage)
-        self.chatThreadsList.currentItemChanged.connect(MainWindow.chatThreadChanged)
+        self.chatThreadsList.clicked.connect(MainWindow.chatThreadChanged)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -101,7 +104,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"AI Assistant", None))
         self.newChatButton.setText(QCoreApplication.translate("MainWindow", u"New Chat", None))
-        self.messageTextBox.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Type your message here...", None))
         self.sendButton.setText(QCoreApplication.translate("MainWindow", u"Send", None))
     # retranslateUi
 
