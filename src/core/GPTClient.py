@@ -62,7 +62,7 @@ class GPTClient(QObject):
 		"""
 		thread = self.client.beta.threads.create(metadata = {'title': title})
 		self.chatThreadList.append(thread)
-		with open(self.chatsDirectory / f'{thread.id}.txt', 'w') as file:
+		with open(self.chatsDirectory / f'{thread.id}.txt', 'w', encoding='utf-8') as file:
 			file.write('')
 		self.chatThreadAdded.emit(thread)
 
